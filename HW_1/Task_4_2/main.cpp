@@ -27,43 +27,44 @@
 
 */
 
-
 #include <iostream>
 #include <cassert>
 
 // Куча, реализованная с помощью массива (MinHeap)
+template <typename T, typename Comparator>
 class Heap {
 private:
-    int *buffer;         //буфер для хранения элементов кучи
-    int buffer_capacity; //вместимость буфера
-    int buffer_size;     //реальный размер буфера
+    T *buffer;                  //буфер для хранения элементов кучи
+    size_t buffer_capacity;     //вместимость буфера
+    size_t buffer_size;         //реальный размер буфера
 
 public:
-    explicit Heap(int size);
+    explicit Heap(size_t size);
     ~Heap();
 
     int extractRoot();
-    void siftUp(int index);
-    void siftDown(int index);
-    void insert(int element);
+    void siftUp(size_t index);
+    void siftDown(size_t index);
+    void insert(T element);
 
     int getBufferSize();
 };
 
-int getMinTime(Heap *heap);
+template <typename T, typename Comparator>
+int getMinTime(Heap<T, Comparator> *heap);
 
 
 int main() {
-    int elements_count = 0;
+    size_t elements_count = 0;
 
     std::cin >> elements_count;
     assert(elements_count > 0);
     //считываем количество вводимых элементов, создаем кучу соответствующей вместимости
-    Heap heap(elements_count);
+    Heap<int, std::less<>> heap(elements_count);
 
     int number = 0;
 
-    for(int i = 0; i < elements_count; ++i) {
+    for(size_t i = 0; i < elements_count; ++i) {
         //считываем элементы кучи и вставляем их в кучу
         std::cin >> number;
         heap.insert(number);
@@ -75,17 +76,19 @@ int main() {
     return 0;
 }
 
-
-Heap::Heap(int size): buffer_capacity(size), buffer_size(0) {
+template <typename T, typename Comparator>
+Heap<T, Comparator>::Heap(size_t size): buffer_capacity(size), buffer_size(0) {
     buffer = new int[buffer_capacity];
 }
 
-Heap::~Heap() {
+template <typename T, typename Comparator>
+Heap<T, Comparator>::~Heap() {
     delete [] buffer;
 }
 
 //извлекаем корневой элемент
-int Heap::extractRoot() {
+template <typename T, typename Comparator>
+int Heap<T, Comparator>::extractRoot() {
     int tmp = buffer[0];
      
     //на место корневого элемента ставим последний элемент в куче и сортируем ее в правильном порядке 
@@ -96,16 +99,19 @@ int Heap::extractRoot() {
     return tmp;
 }
 
-void Heap::siftDown(int index) {
-    int left = 2 * index + 1;
-    int right = 2 * index + 2;
+template <typename T, typename Comparator>
+void Heap<T, Comparator>::siftDown(size_t index) {
+    Comparator cmp = Comparator();
+
+    size_t left = 2 * index + 1;
+    size_t right = 2 * index + 2;
     // Поскольку в нашем случае используется min heap, мы ищем меньшего сына, если такой есть.
     int least = index;
 
-    if(left < buffer_size && buffer[left] < buffer[index])
+    if(left < buffer_size && cmp(buffer[left],buffer[index]))
         least = left;
 
-    if(right < buffer_size && buffer[right] < buffer[least])
+    if(right < buffer_size && cmp(buffer[right], buffer[least]))
         least = right;
 
     // Если меньший сын есть, то проталкиваем корень в него.
@@ -115,13 +121,16 @@ void Heap::siftDown(int index) {
     }
 }
 
-void Heap::siftUp(int index) {
-    int parent;
+template <typename T, typename Comparator>
+void Heap<T, Comparator>::siftUp(size_t index) {
+    size_t parent;
+    Comparator cmp = Comparator();
 
     while(index > 0) {
         parent = (index - 1) / 2;
 
-        if(buffer[index] <= buffer[parent])
+        if(cmp(buffer[index], buffer[parent]))
+        //if(buffer[index] <= buffer[parent])
             std::swap(buffer[index], buffer[parent]);
 
         index = parent;
@@ -129,18 +138,21 @@ void Heap::siftUp(int index) {
 }
 
 //добавление элемента в кучу
-void Heap::insert(int element) {
+template <typename T, typename Comparator>
+void Heap<T, Comparator>::insert(T element) {
     buffer[buffer_size] = element;
     siftUp(buffer_size);
     buffer_size++;
 }
 
-int Heap::getBufferSize() {
+template <typename T, typename Comparator>
+int Heap<T, Comparator>::getBufferSize() {
     return buffer_size;
 }
 
-//Расчет минимального времени для подсчета суммы 
-int getMinTime(Heap *heap)
+//Расчет минимального времени для подсчета суммы
+template <typename T, typename Comparator>
+int getMinTime(Heap<T, Comparator> *heap)
 {
     int time = 0; //затраченное время
     int sum = 0; //промежуточная сумма

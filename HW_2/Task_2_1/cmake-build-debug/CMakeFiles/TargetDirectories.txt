@@ -1,3 +1,0 @@
-/home/ekaterina/CLionProjects/TP_algorithms/HW_2/Task_2_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/ekaterina/CLionProjects/TP_algorithms/HW_2/Task_2_1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ekaterina/CLionProjects/TP_algorithms/HW_2/Task_2_1/cmake-build-debug/CMakeFiles/Task_2_1.dir

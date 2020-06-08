@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ekaterina/CLionProjects/TP_algorithms/HW_3/Task_1/main.cpp
+iostream
+-
+vector
+-
+cassert
+-
+functional
+-
+queue
+-
+set
+-
+iterator
+-
+
